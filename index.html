@@ -84,6 +84,7 @@
       margin-bottom: 40px;
       border: 1px solid var(--primary-light);
       padding: 30px;
+      position: relative;
     }
     
     .list-item {
@@ -150,6 +151,78 @@
       margin-top: 50px;
     }
     
+    /* Estilos para o botão de impressão */
+    .print-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .print-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Estilos para impressão */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      
+      .print-section, .print-section * {
+        visibility: visible;
+      }
+      
+      .print-section {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none;
+        border: none;
+        padding: 20px;
+      }
+      
+      .print-btn, .navbar, .footer, .section-title::after {
+        display: none !important;
+      }
+      
+      .list-content {
+        display: block !important;
+        border-left: none;
+        padding: 5px 0;
+        background-color: transparent;
+      }
+      
+      .list-title {
+        cursor: default;
+        padding: 5px 0;
+      }
+      
+      .list-title:hover {
+        background-color: transparent;
+        color: var(--text-color);
+      }
+      
+      .list-title i {
+        display: none;
+      }
+    }
+    
     @media (max-width: 768px) {
       .section-title {
         font-size: 1.5rem;
@@ -157,6 +230,15 @@
       
       .list-container {
         padding: 20px;
+      }
+      
+      .print-btn {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-bottom: 15px;
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
@@ -205,7 +287,10 @@
       <!-- Aula 1 -->
       <section id="aula1" class="mb-16" data-aos="fade-up">
         <h2 class="section-title">Aula 1: Saúde Ambiental, Vigilância Sanitária e Processo Saúde-Doença</h2>
-        <div class="list-container">
+        <div class="list-container print-section">
+          <button class="print-btn" onclick="printSection('aula1')">
+            <i data-feather="printer"></i> Imprimir Aula 1
+          </button>
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
               <i data-feather="chevron-right"></i> Saúde Ambiental
@@ -307,7 +392,10 @@
       <!-- Aula 2 -->
       <section id="aula2" class="mb-16" data-aos="fade-up">
         <h2 class="section-title">Aula 2: Saneamento Básico e Saúde Pública</h2>
-        <div class="list-container">
+        <div class="list-container print-section">
+          <button class="print-btn" onclick="printSection('aula2')">
+            <i data-feather="printer"></i> Imprimir Aula 2
+          </button>
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
               <i data-feather="chevron-right"></i> Saneamento Básico
@@ -413,7 +501,10 @@
       <!-- Aula 3 -->
       <section id="aula3" class="mb-16" data-aos="fade-up">
         <h2 class="section-title">Aula 3: Sistemas de Informação em Saúde</h2>
-        <div class="list-container">
+        <div class="list-container print-section">
+          <button class="print-btn" onclick="printSection('aula3')">
+            <i data-feather="printer"></i> Imprimir Aula 3
+          </button>
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
               <i data-feather="chevron-right"></i> Sistemas de Informação em Saúde
@@ -490,7 +581,10 @@
       <!-- Aula 4 -->
       <section id="aula4" class="mb-16" data-aos="fade-up">
         <h2 class="section-title">Aula 4: Prontuário Eletrônico do Paciente (PEP)</h2>
-        <div class="list-container">
+        <div class="list-container print-section">
+          <button class="print-btn" onclick="printSection('aula4')">
+            <i data-feather="printer"></i> Imprimir Aula 4
+          </button>
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
               <i data-feather="chevron-right"></i> Prontuário Eletrônico (PEP)
@@ -626,7 +720,10 @@
       <!-- Aula 5 -->
       <section id="aula5" class="mb-16" data-aos="fade-up">
         <h2 class="section-title">Aula 5: Liderança – Parte 1</h2>
-        <div class="list-container">
+        <div class="list-container print-section">
+          <button class="print-btn" onclick="printSection('aula5')">
+            <i data-feather="printer"></i> Imprimir Aula 5
+          </button>
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
               <i data-feather="chevron-right"></i> Liderança – Parte 1
@@ -662,73 +759,50 @@
           
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Histórico
+              <i data-feather="chevron-right"></i> Teorias da Liderança
             </div>
             <div class="list-content">
-              <p>O estudo da liderança evoluiu ao longo do tempo:</p>
+              <p>Principais abordagens teóricas:</p>
               <ul>
-                <li>Antiguidade: enfoque em qualidades inatas dos líderes</li>
-                <li>Século XIX: Teoria do Grande Homem</li>
-                <li>Década de 1930-40: Teoria dos Traços</li>
-                <li>Década de 1950-60: Teorias Comportamentais</li>
-                <li>Década de 1970 em diante: Teorias Contingenciais e Situacionais</li>
+                <li>Teorias de Traços: focam nas características pessoais do líder</li>
+                <li>Teorias Comportamentais: focam no comportamento do líder</li>
+                <li>Teorias Contingenciais: consideram a situação como fator determinante</li>
+                <li>Teorias Modernas: liderança transformacional, carismática, servidora</li>
               </ul>
             </div>
           </div>
           
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Teoria do Grande Homem
+              <i data-feather="chevron-right"></i> Estilos de Liderança
             </div>
             <div class="list-content">
-              <p>Teoria que postula que a liderança é inata - os grandes líderes nascem com características especiais que os predestinam à liderança. Foi popular no século XIX, mas perdeu força por não considerar fatores contextuais e de desenvolvimento.</p>
+              <p>Principais estilos de liderança:</p>
+              <ul>
+                <li>Autocrático: decisões centralizadas no líder</li>
+                <li>Democrático: participação da equipe nas decisões</li>
+                <li>Laissez-faire: liberdade total para a equipe</li>
+                <li>Situacional: adaptação do estilo à situação</li>
+                <li>Transformacional: inspiração e motivação para mudanças</li>
+              </ul>
             </div>
           </div>
           
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Teoria dos Traços
+              <i data-feather="chevron-right"></i> Competências do Líder
             </div>
             <div class="list-content">
-              <p>Busca identificar características pessoais que diferenciam líderes de não-líderes. Traços comumente associados à liderança incluem:</p>
+              <p>Competências essenciais para a liderança eficaz:</p>
               <ul>
-                <li>Inteligência</li>
-                <li>Autoconfiança</li>
-                <li>Determinação</li>
-                <li>Integridade</li>
-                <li>Sociabilidade</li>
+                <li>Inteligência emocional</li>
+                <li>Capacidade de comunicação</li>
+                <li>Visão estratégica</li>
+                <li>Capacidade de tomada de decisão</li>
+                <li>Habilidade de motivar pessoas</li>
+                <li>Integridade e ética</li>
+                <li>Resiliência e adaptabilidade</li>
               </ul>
-              <p>Críticas: não há um conjunto universal de traços que garanta sucesso na liderança em todas as situações.</p>
-            </div>
-          </div>
-          
-          <div class="list-item">
-            <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Teoria Comportamental
-            </div>
-            <div class="list-content">
-              <p>Foca nos comportamentos dos líderes em vez de suas características inatas. Destacam-se dois estilos principais:</p>
-              <ul>
-                <li>Liderança orientada para a tarefa: foco na realização de objetivos</li>
-                <li>Liderança orientada para as pessoas: foco no bem-estar das relações</li>
-              </ul>
-              <p>Estudos da Universidade de Ohio e Michigan foram fundamentais para esta teoria.</p>
-            </div>
-          </div>
-          
-          <div class="list-item">
-            <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Teoria Situacional/Contingencial
-            </div>
-            <div class="list-content">
-              <p>Argumenta que não há um estilo de liderança ideal; o estilo eficaz depende da situação. Fatores situacionais incluem:</p>
-              <ul>
-                <li>Características dos seguidores</li>
-                <li>Natureza da tarefa</li>
-                <li>Estrutura organizacional</li>
-                <li>Ambiente externo</li>
-              </ul>
-              <p>Modelos importantes: Fiedler, Hersey-Blanchard, Caminho-Objetivo.</p>
             </div>
           </div>
         </div>
@@ -737,58 +811,42 @@
       <!-- Aula 6 -->
       <section id="aula6" class="mb-16" data-aos="fade-up">
         <h2 class="section-title">Aula 6: Liderança – Parte 2</h2>
-        <div class="list-container">
+        <div class="list-container print-section">
+          <button class="print-btn" onclick="printSection('aula6')">
+            <i data-feather="printer"></i> Imprimir Aula 6
+          </button>
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
               <i data-feather="chevron-right"></i> Liderança – Parte 2
             </div>
             <div class="list-content">
-              <p>Continuação do estudo da liderança, abordando teorias contemporâneas e aspectos práticos da liderança eficaz em contextos organizacionais, especialmente na área da saúde.</p>
+              <p>Continuação do estudo da liderança, abordando aspectos práticos, desafios contemporâneos e aplicações no contexto da saúde.</p>
             </div>
           </div>
           
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Teorias contemporâneas
+              <i data-feather="chevron-right"></i> Liderança em Saúde
             </div>
             <div class="list-content">
-              <p>Teorias mais recentes sobre liderança:</p>
+              <p>Características específicas da liderança no contexto da saúde:</p>
               <ul>
-                <li>Liderança Transformacional</li>
-                <li>Liderança Transacional</li>
-                <li>Liderança Servidora</li>
-                <li>Liderança Autêntica</li>
-                <li>Liderança Distribuída</li>
+                <li>Ambiente de alta complexidade e pressão</li>
+                <li>Necessidade de trabalho em equipe multidisciplinar</li>
+                <li>Gestão de recursos escassos</li>
+                <li>Foco na segurança do paciente</li>
+                <li>Adaptação a constantes mudanças tecnológicas</li>
+                <li>Gestão de crises e emergências</li>
               </ul>
             </div>
           </div>
           
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Liderança Transformacional
+              <i data-feather="chevron-right"></i> Liderança Situacional
             </div>
             <div class="list-content">
-              <p>Estilo de liderança que inspira seguidores a transcenderem seus próprios interesses para o bem da organização. Características:</p>
-              <ul>
-                <li>Influência idealizada (carisma)</li>
-                <li>Motivação inspiradora</li>
-                <li>Estímulo intelectual</li>
-                <li>Consideração individualizada</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div class="list-item">
-            <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Liderança Transacional
-            </div>
-            <div class="list-content">
-              <p>Baseia-se em trocas entre líder e seguidores - recompensas por desempenho e correção de desvios. Componentes:</p>
-              <ul>
-                <li>Liderança contingente de recompensa</li>
-                <li>Gerenciamento por exceção (ativo ou passivo)</li>
-              </ul>
-              <p>Eficaz para manter a estabilidade, mas menos inovador que a liderança transformacional.</p>
+              <p>Modelo desenvolvido por Hersey e Blanchard que propõe que o estilo de liderança deve variar de acordo com a maturidade dos liderados e a situação específica. Os estilos variam do diretivo ao delegativo.</p>
             </div>
           </div>
           
@@ -797,81 +855,64 @@
               <i data-feather="chevron-right"></i> Liderança Servidora
             </div>
             <div class="list-content">
-              <p>Conceito popularizado por Robert Greenleaf, onde o líder prioriza servir os outros. Características:</p>
-              <ul>
-                <li>Ouvir ativamente</li>
-                <li>Empatia</li>
-                <li>Cura (cuidado com o bem-estar)</li>
-                <li>Conscientização</li>
-                <li>Persuasão</li>
-                <li>Compromisso com o crescimento das pessoas</li>
-              </ul>
+              <p>Abordagem que coloca o líder a serviço da equipe, focando nas necessidades dos outros. Características incluem empatia, escuta ativa, conscientização, persuasão e compromisso com o crescimento das pessoas.</p>
             </div>
           </div>
           
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Liderança na saúde
+              <i data-feather="chevron-right"></i> Liderança Transformacional
             </div>
             <div class="list-content">
-              <p>Desafios específicos da liderança em serviços de saúde:</p>
-              <ul>
-                <li>Ambiente de alta complexidade e pressão</li>
-                <li>Equipes multiprofissionais</li>
-                <li>Necessidade de tomada de decisão rápida</li>
-                <li>Gestão de recursos escassos</li>
-                <li>Pressão por resultados de qualidade e segurança</li>
-                <li>Adaptação a mudanças tecnológicas rápidas</li>
-              </ul>
+              <p>Estilo que inspira mudanças positivas nos seguidores, focando na visão, motivação intelectual, consideração individualizada e influência idealizada. Busca transformar indivíduos e organizações.</p>
             </div>
           </div>
           
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Competências do líder em saúde
+              <i data-feather="chevron-right"></i> Desafios Contemporâneos
             </div>
             <div class="list-content">
-              <p>Competências essenciais para líderes na área da saúde:</p>
+              <p>Desafios atuais para os líderes em saúde:</p>
               <ul>
-                <li>Conhecimento técnico em saúde</li>
-                <li>Habilidades de comunicação eficaz</li>
-                <li>Capacidade de tomada de decisão sob pressão</li>
-                <li>Gestão de conflitos</li>
-                <li>Pensamento sistêmico</li>
-                <li>Resiliência emocional</li>
-                <li>Capacidade de promover segurança do paciente</li>
+                <li>Gestão de equipes remotas e híbridas</li>
+                <li>Adaptação à transformação digital</li>
+                <li>Gestão da diversidade e inclusão</li>
+                <li>Liderança em situações de crise (pandemia)</li>
+                <li>Sustentabilidade nos serviços de saúde</li>
+                <li>Gestão do bem-estar da equipe</li>
               </ul>
             </div>
           </div>
           
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Desenvolvimento de liderança
+              <i data-feather="chevron-right"></i> Desenvolvimento de Líderes
             </div>
             <div class="list-content">
               <p>Estratégias para desenvolver habilidades de liderança:</p>
               <ul>
                 <li>Mentoria e coaching</li>
-                <li>Experiências desafiadoras</li>
-                <li>Educação formal</li>
-                <li>Auto-reflexão e autoconhecimento</li>
+                <li>Programas de treinamento formal</li>
+                <li>Experiências práticas desafiadoras</li>
                 <li>Feedback 360 graus</li>
-                <li>Networking e aprendizado com pares</li>
+                <li>Autodesenvolvimento contínuo</li>
+                <li>Networking e troca de experiências</li>
               </ul>
             </div>
           </div>
           
           <div class="list-item">
             <div class="list-title" onclick="toggleContent(this)">
-              <i data-feather="chevron-right"></i> Liderança e mudança organizacional
+              <i data-feather="chevron-right"></i> Liderança e Mudança Organizacional
             </div>
             <div class="list-content">
-              <p>O papel do líder na gestão de mudanças em organizações de saúde:</p>
+              <p>O papel do líder na gestão de mudanças:</p>
               <ul>
                 <li>Criar urgência para a mudança</li>
                 <li>Formar uma coalizão guia</li>
-                <li>Desenvolver uma visão clara</li>
-                <li>Comunicar a visão eficazmente</li>
+                <li>Criar uma visão para a mudança</li>
+                <li>Comunicar a visão</li>
                 <li>Remover obstáculos</li>
                 <li>Gerar vitórias de curto prazo</li>
                 <li>Consolidar ganhos e produzir mais mudanças</li>
@@ -889,7 +930,7 @@
     <div class="container mx-auto px-4">
       <p>LS Educacional - Resumo das Aulas</p>
       <p>Aluno(a): Simone Gomes Barreto | Professor: José Wiliam Aguiar</p>
-      <p class="mt-4 text-sm">© 2023 - Todos os direitos reservados</p>
+      <p class="mt-4">© 2023 - Todos os direitos reservados</p>
     </div>
   </footer>
 
@@ -898,59 +939,75 @@
     document.addEventListener('DOMContentLoaded', function() {
       AOS.init({
         duration: 800,
-        easing: 'ease-in-out',
         once: true
       });
       
       // Inicializar Feather Icons
       feather.replace();
       
-      // Mobile menu toggle
+      // Menu mobile
       const mobileMenuButton = document.getElementById('mobile-menu-button');
       const mobileMenu = document.getElementById('mobile-menu');
       
-      if (mobileMenuButton) {
-        mobileMenuButton.addEventListener('click', function() {
-          mobileMenu.classList.toggle('hidden');
-          // Trocar ícone do menu
-          const icon = mobileMenuButton.querySelector('i');
-          if (mobileMenu.classList.contains('hidden')) {
-            icon.setAttribute('data-feather', 'menu');
-          } else {
-            icon.setAttribute('data-feather', 'x');
-          }
+      mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+        // Alterar ícone do menu
+        const icon = mobileMenuButton.querySelector('i');
+        if (mobileMenu.classList.contains('hidden')) {
           feather.replace();
-        });
-      }
-    });
-    
-    // Função para mostrar/ocultar conteúdo
-    function toggleContent(element) {
-      const content = element.nextElementSibling;
-      const isActive = content.classList.contains('active');
-      
-      // Fechar todos os conteúdos abertos
-      document.querySelectorAll('.list-content.active').forEach(item => {
-        if (item !== content) {
-          item.classList.remove('active');
-          item.previousElementSibling.classList.remove('expanded');
+        } else {
+          icon.setAttribute('data-feather', 'x');
+          feather.replace();
         }
       });
-      
-      // Alternar o conteúdo clicado
-      content.classList.toggle('active');
+    });
+    
+    // Função para expandir/recolher conteúdo
+    function toggleContent(element) {
+      const content = element.nextElementSibling;
       element.classList.toggle('expanded');
+      content.classList.toggle('active');
+      
+      // Alterar ícone
+      const icon = element.querySelector('i');
+      if (element.classList.contains('expanded')) {
+        icon.setAttribute('data-feather', 'chevron-down');
+      } else {
+        icon.setAttribute('data-feather', 'chevron-right');
+      }
+      feather.replace();
     }
     
-    // Fechar conteúdo ao clicar fora
-    document.addEventListener('click', function(event) {
-      if (!event.target.closest('.list-item')) {
-        document.querySelectorAll('.list-content.active').forEach(item => {
-          item.classList.remove('active');
-          item.previousElementSibling.classList.remove('expanded');
+    // Função para imprimir uma seção específica
+    function printSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      const printSection = section.querySelector('.print-section');
+      
+      // Abrir todas as listas para impressão
+      const listContents = printSection.querySelectorAll('.list-content');
+      listContents.forEach(content => {
+        content.style.display = 'block';
+      });
+      
+      // Abrir janela de impressão
+      window.print();
+      
+      // Recolher as listas após impressão (com pequeno delay)
+      setTimeout(() => {
+        listContents.forEach(content => {
+          content.style.display = 'none';
         });
-      }
-    });
+        
+        // Resetar ícones
+        const listTitles = printSection.querySelectorAll('.list-title');
+        listTitles.forEach(title => {
+          title.classList.remove('expanded');
+          const icon = title.querySelector('i');
+          icon.setAttribute('data-feather', 'chevron-right');
+        });
+        feather.replace();
+      }, 500);
+    }
   </script>
 </body>
 </html>
