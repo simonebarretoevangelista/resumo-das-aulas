@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LS Educacional - Resumo das Aulas em Lista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #10b981;
+      --primary-light: #d1fae5;
+      --primary-dark: #059669;
+      --secondary-color: #ffffff;
+      --text-color: #1f2937;
+      --background-color: #f9fafb;
+      --accent-color: #f59e0b;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      background-color: var(--secondary-color);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .nav-link {
+      color: var(--text-color);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary-color);
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 1.5rem;
+      border-left: 5px solid var(--primary-color);
+      padding-left: 15px;
+      position: relative;
+    }
+    
+    .list-container {
+      background-color: var(--secondary-color);
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      margin-bottom: 40px;
+      border: 1px solid var(--primary-light);
+      padding: 30px;
+    }
+    
+    .list-item {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 15px;
+    }
+    
+    .list-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    
+    .list-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--text-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    
+    .list-title:hover {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    
+    .list-title i {
+      margin-right: 10px;
+      transition: transform 0.3s ease;
+    }
+    
+    .list-title.expanded i {
+      transform: rotate(90deg);
+    }
+    
+    .list-content {
+      padding: 15px;
+      background-color: #f8fafc;
+      border-radius: 8px;
+      margin-top: 10px;
+      display: none;
+      border-left: 3px solid var(--primary-color);
+    }
+    
+    .list-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .footer {
+      background-color: var(--text-color);
+      color: var(--secondary-color);
+      padding: 30px 0;
+      text-align: center;
+      margin-top: 50px;
+    }
+    
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .list-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen">
+  <!-- Navbar -->
+  <nav class="navbar py-4">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center">
+        <div class="text-xl font-bold text-green-600">LS Educacional</div>
+        <div class="hidden md:flex space-x-6">
+          <a href="#aula1" class="nav-link">Aula 1</a>
+          <a href="#aula2" class="nav-link">Aula 2</a>
+          <a href="#aula3" class="nav-link">Aula 3</a>
+          <a href="#aula4" class="nav-link">Aula 4</a>
+          <a href="#aula5" class="nav-link">Aula 5</a>
+          <a href="#aula6" class="nav-link">Aula 6</a>
+        </div>
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="text-gray-700">
+            <i data-feather="menu"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2">
+        <a href="#aula1" class="block py-2 px-4 bg-gray-100 rounded">Aula 1</a>
+        <a href="#aula2" class="block py-2 px-4 bg-gray-100 rounded">Aula 2</a>
+        <a href="#aula3" class="block py-2 px-4 bg-gray-100 rounded">Aula 3</a>
+        <a href="#aula4" class="block py-2 px-4 bg-gray-100 rounded">Aula 4</a>
+        <a href="#aula5" class="block py-2 px-4 bg-gray-100 rounded">Aula 5</a>
+        <a href="#aula6" class="block py-2 px-4 bg-gray-100 rounded">Aula 6</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="container mx-auto px-4 py-8">
+    <header class="mb-12 text-center" data-aos="fade-up">
+      <h1 class="text-3xl md:text-4xl font-bold mb-2 text-green-700">Resumo das Aulas – Lista Interativa</h1>
+      <p class="text-lg text-gray-700">Aluno(a): Simone Gomes Barreto | Professor: José Wiliam Aguiar</p>
+    </header>
+
+    <div class="max-w-6xl mx-auto">
+      <!-- Aula 1 -->
+      <section id="aula1" class="mb-16" data-aos="fade-up">
+        <h2 class="section-title">Aula 1: Saúde Ambiental, Vigilância Sanitária e Processo Saúde-Doença</h2>
+        <div class="list-container">
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Saúde Ambiental
+            </div>
+            <div class="list-content">
+              <p>Conceito que abrange as condições ambientais que influenciam a saúde humana. A saúde ambiental envolve a avaliação, correção, controle e prevenção dos fatores ambientais que podem afetar adversamente a saúde das gerações presentes e futuras.</p>
+              <p>Inclui aspectos como qualidade do ar, água, solo, alimentos, habitação, condições de trabalho e fatores socioeconômicos que influenciam a saúde.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Vigilância Sanitária
+            </div>
+            <div class="list-content">
+              <p>Conjunto de ações capazes de eliminar, diminuir ou prevenir riscos à saúde e de intervir nos problemas sanitários decorrentes do meio ambiente, da produção e circulação de bens e da prestação de serviços de interesse da saúde.</p>
+              <p>Abrange o controle de bens de consumo, serviços, meio ambiente, processos e tecnologias que direta ou indiretamente se relacionam com a saúde.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Objetivos Gerais
+            </div>
+            <div class="list-content">
+              <p>Os objetivos gerais da saúde ambiental incluem:</p>
+              <ul>
+                <li>Promover ambientes saudáveis</li>
+                <li>Prevenir doenças relacionadas ao ambiente</li>
+                <li>Proteger grupos vulneráveis</li>
+                <li>Fortalecer políticas públicas de saúde ambiental</li>
+                <li>Promover a educação em saúde ambiental</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Histórico saúde-doença
+            </div>
+            <div class="list-content">
+              <p>A compreensão do processo saúde-doença evoluiu ao longo da história. Inicialmente, predominava a visão mágico-religiosa, seguida pela concepção hipocrática que relacionava saúde ao equilíbrio dos humores corporais.</p>
+              <p>Com a Revolução Industrial, surgiu a medicina social, que relacionava as condições de trabalho e vida com a saúde. Atualmente, adota-se uma visão holística que considera múltiplos determinantes sociais, econômicos e ambientais.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Definição OMS
+            </div>
+            <div class="list-content">
+              <p>Segundo a Organização Mundial da Saúde (OMS), saúde é "um estado de completo bem-estar físico, mental e social, e não apenas a ausência de doença ou enfermidade".</p>
+              <p>Esta definição amplia o conceito de saúde para além do aspecto biológico, incluindo dimensões psicológicas e sociais, reconhecendo a saúde como um direito fundamental.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Processo saúde-doença
+            </div>
+            <div class="list-content">
+              <p>O processo saúde-doença é uma expressão utilizada para se referir ao conjunto de variáveis que intervêm no aparecimento e evolução das doenças, bem como na manutenção da saúde.</p>
+              <p>É determinado por fatores biológicos, ambientais, sociais, econômicos, culturais e políticos que interagem de forma complexa, influenciando o estado de saúde dos indivíduos e populações.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Meio ambiente
+            </div>
+            <div class="list-content">
+              <p>O meio ambiente compreende todos os fatores externos ao organismo humano que influenciam a saúde, incluindo fatores físicos, químicos, biológicos e sociais.</p>
+              <p>A degradação ambiental, poluição, mudanças climáticas e perda de biodiversidade são desafios contemporâneos que impactam diretamente a saúde humana.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Educação popular
+            </div>
+            <div class="list-content">
+              <p>A educação popular em saúde é uma abordagem que valoriza os saberes e práticas das comunidades, promovendo a participação ativa dos sujeitos no cuidado com a saúde.</p>
+              <p>Baseia-se no diálogo, na problematização da realidade e na construção coletiva de conhecimentos e soluções para os problemas de saúde.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Alfabetização ecológica
+            </div>
+            <div class="list-content">
+              <p>A alfabetização ecológica refere-se à capacidade de compreender os princípios básicos da ecologia e aplicar esse conhecimento para criar comunidades humanas sustentáveis.</p>
+              <p>Envolve o entendimento das interconexões entre os sistemas naturais e sociais, promovendo uma relação mais harmoniosa entre seres humanos e meio ambiente.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Aula 2 -->
+      <section id="aula2" class="mb-16" data-aos="fade-up">
+        <h2 class="section-title">Aula 2: Saneamento Básico e Saúde Pública</h2>
+        <div class="list-container">
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Saneamento Básico
+            </div>
+            <div class="list-content">
+              <p>Conjunto de serviços, infraestruturas e instalações operacionais que garantem condições de higiene e salubridade ambiental. Inclui abastecimento de água, esgotamento sanitário, limpeza urbana e manejo de resíduos sólidos, drenagem e manejo das águas pluviais.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Definição e finalidades
+            </div>
+            <div class="list-content">
+              <p>O saneamento básico tem como finalidades principais:</p>
+              <ul>
+                <li>Promover a saúde pública</li>
+                <li>Melhorar a qualidade de vida da população</li>
+                <li>Proteger o meio ambiente</li>
+                <li>Preservar os recursos hídricos</li>
+                <li>Promover o desenvolvimento socioeconômico</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Legislação
+            </div>
+            <div class="list-content">
+              <p>No Brasil, o marco legal do saneamento básico é a Lei nº 11.445/2007, que estabelece as diretrizes nacionais para o saneamento básico. Em 2020, foi aprovada a Lei nº 14.026, que atualizou o marco legal do saneamento, com metas de universalização até 2033.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Ações de saneamento
+            </div>
+            <div class="list-content">
+              <p>As principais ações de saneamento básico incluem:</p>
+              <ul>
+                <li>Abastecimento de água potável</li>
+                <li>Coleta e tratamento de esgoto</li>
+                <li>Coleta e destinação adequada de resíduos sólidos</li>
+                <li>Drenagem urbana de águas pluviais</li>
+                <li>Controle de vetores de doenças</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Impactos Saúde Pública
+            </div>
+            <div class="list-content">
+              <p>O saneamento inadequado tem impactos significativos na saúde pública, incluindo:</p>
+              <ul>
+                <li>Propagação de doenças de veiculação hídrica</li>
+                <li>Aumento da mortalidade infantil</li>
+                <li>Desnutrição e problemas de desenvolvimento</li>
+                <li>Proliferação de vetores de doenças</li>
+                <li>Impactos na saúde mental e qualidade de vida</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Doenças hídricas
+            </div>
+            <div class="list-content">
+              <p>Doenças relacionadas à falta de saneamento básico incluem:</p>
+              <ul>
+                <li>Cólera</li>
+                <li>Diarreias infecciosas</li>
+                <li>Hepatite A</li>
+                <li>Febre tifoide</li>
+                <li>Leptospirose</li>
+                <li>Esquistossomose</li>
+                <li>Dengue, Zika e Chikungunya (relacionadas ao acúmulo de água)</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Cenário nacional
+            </div>
+            <div class="list-content">
+              <p>No Brasil, apesar dos avanços, ainda há grandes desafios no saneamento básico:</p>
+              <ul>
+                <li>Cerca de 35 milhões de pessoas não têm acesso à água tratada</li>
+                <li>Aproximadamente 100 milhões não têm coleta de esgoto</li>
+                <li>Apenas 49% do esgoto gerado é tratado</li>
+                <li>Desigualdades regionais significativas</li>
+                <li>Metas de universalização estabelecidas para 2033</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Aula 3 -->
+      <section id="aula3" class="mb-16" data-aos="fade-up">
+        <h2 class="section-title">Aula 3: Sistemas de Informação em Saúde</h2>
+        <div class="list-container">
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Sistemas de Informação em Saúde
+            </div>
+            <div class="list-content">
+              <p>Conjunto de componentes inter-relacionados que coletam, processam, armazenam e disseminam dados e informações para apoiar a tomada de decisões em saúde, o planejamento, a gestão e a avaliação de serviços de saúde.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Dados e Informações
+            </div>
+            <div class="list-content">
+              <p>Dados são observações brutas, enquanto informações são dados processados e organizados que possuem significado e utilidade. Em saúde, a transformação de dados em informações é crucial para a tomada de decisões baseadas em evidências.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> DATASUS
+            </div>
+            <div class="list-content">
+              <p>O Departamento de Informática do SUS (DATASUS) é o órgão do Ministério da Saúde responsável por coletar, processar e disseminar informações sobre saúde no Brasil. Mantém diversos sistemas de informação que subsidiam a gestão do SUS.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Sistemas Principais
+            </div>
+            <div class="list-content">
+              <p>Principais sistemas de informação em saúde no Brasil:</p>
+              <ul>
+                <li>Sistema de Informação sobre Mortalidade (SIM)</li>
+                <li>Sistema de Informação sobre Nascidos Vivos (SINASC)</li>
+                <li>Sistema de Informação de Agravos de Notificação (SINAN)</li>
+                <li>Sistema de Informações Hospitalares (SIH)</li>
+                <li>Sistema de Informações Ambulatoriais (SIA)</li>
+                <li>Sistema de Informação da Atenção Básica (SIAB)</li>
+                <li>Cartão Nacional de Saúde (CNS)</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Problemas comuns
+            </div>
+            <div class="list-content">
+              <p>Desafios enfrentados pelos sistemas de informação em saúde:</p>
+              <ul>
+                <li>Subnotificação de dados</li>
+                <li>Qualidade insuficiente dos dados</li>
+                <li>Falta de integração entre sistemas</li>
+                <li>Dificuldades de acesso e uso da informação</li>
+                <li>Capacitação insuficiente dos profissionais</li>
+                <li>Questões de privacidade e segurança</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> TabWin
+            </div>
+            <div class="list-content">
+              <p>O TabWin é um software desenvolvido pelo DATASUS para tabulação de dados em saúde. Permite a análise de informações epidemiológicas e a produção de relatórios, gráficos e mapas temáticos para apoio à gestão em saúde.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Aula 4 -->
+      <section id="aula4" class="mb-16" data-aos="fade-up">
+        <h2 class="section-title">Aula 4: Prontuário Eletrônico do Paciente (PEP)</h2>
+        <div class="list-container">
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Prontuário Eletrônico (PEP)
+            </div>
+            <div class="list-content">
+              <p>Registro digital das informações de saúde de um paciente ao longo do tempo, mantido por provedores de saúde. Permite o armazenamento, recuperação e compartilhamento seguro de informações clínicas.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Histórico do PEP
+            </div>
+            <div class="list-content">
+              <p>O prontuário eletrônico evoluiu a partir dos registros em papel. As primeiras tentativas de informatização ocorreram na década de 1960, mas só ganharam impulso significativo a partir dos anos 1990 com o avanço da tecnologia da informação.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Conceito e funções
+            </div>
+            <div class="list-content">
+              <p>Funções principais do PEP:</p>
+              <ul>
+                <li>Armazenar informações clínicas do paciente</li>
+                <li>Facilitar a comunicação entre profissionais</li>
+                <li>Apoiar a tomada de decisões clínicas</li>
+                <li>Permitir o acompanhamento longitudinal do paciente</li>
+                <li>Facilitar pesquisas em saúde</li>
+                <li>Melhorar a eficiência dos serviços de saúde</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> LGPD
+            </div>
+            <div class="list-content">
+              <p>A Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018) estabelece diretrizes importantes para o tratamento de dados pessoais em prontuários eletrônicos, incluindo consentimento, finalidade, necessidade e segurança no tratamento dos dados.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Tipos de dados clínicos
+            </div>
+            <div class="list-content">
+              <p>Dados comumente armazenados em um PEP:</p>
+              <ul>
+                <li>Dados demográficos do paciente</li>
+                <li>Histórico médico</li>
+                <li>Medicações e alergias</li>
+                <li>Resultados de exames</li>
+                <li>Evoluções clínicas</li>
+                <li>Prescrições médicas</li>
+                <li>Imagens diagnósticas</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Sistema voltado para a pessoa
+            </div>
+            <div class="list-content">
+              <p>O PEP moderno é centrado no paciente, permitindo que ele tenha acesso às suas informações e participe ativamente do seu cuidado. Inclui funcionalidades como agendamento online, telemedicina e acesso a resultados de exames.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Integração dos dados
+            </div>
+            <div class="list-content">
+              <p>A integração de dados entre diferentes sistemas de saúde é um desafio importante. Padrões como HL7 (Health Level Seven) e terminologias como SNOMED CT buscam facilitar a interoperabilidade entre diferentes sistemas de PEP.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Etapas evolutivas
+            </div>
+            <div class="list-content">
+              <p>Evolução dos sistemas de prontuário:</p>
+              <ul>
+                <li>Prontuário em papel</li>
+                <li>Sistemas departamentais isolados</li>
+                <li>Prontuário eletrônico do paciente (PEP)</li>
+                <li>Prontuário eletrônico de saúde (PES)</li>
+                <li>Registro eletrônico de saúde (RES)</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Atributos do PEP
+            </div>
+            <div class="list-content">
+              <p>Atributos desejáveis em um bom sistema de PEP:</p>
+              <ul>
+                <li>Usabilidade</li>
+                <li>Confiabilidade</li>
+                <li>Segurança</li>
+                <li>Interoperabilidade</li>
+                <li>Escalabilidade</li>
+                <li>Capacidade de personalização</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Fatores de sucesso
+            </div>
+            <div class="list-content">
+              <p>Fatores críticos para a implementação bem-sucedida de um PEP:</p>
+                <ul>
+                  <li>Envolvimento dos usuários no processo</li>
+                  <li>Capacitação adequada da equipe</li>
+                  <li>Suporte da alta administração</li>
+                  <li>Planejamento cuidadoso da implementação</li>
+                  <li>Infraestrutura tecnológica adequada</li>
+                  <li>Avaliação contínua e ajustes</li>
+                </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Aula 5 -->
+      <section id="aula5" class="mb-16" data-aos="fade-up">
+        <h2 class="section-title">Aula 5: Liderança – Parte 1</h2>
+        <div class="list-container">
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Liderança – Parte 1
+            </div>
+            <div class="list-content">
+              <p>Estudo das teorias e conceitos fundamentais sobre liderança. A liderança é um processo de influência social no qual uma pessoa pode recrutar o auxílio e o apoio de outros na realização de uma tarefa comum.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Liderança vs Gerenciamento
+            </div>
+            <div class="list-content">
+              <p>Diferenças fundamentais:</p>
+              <ul>
+                <li>Liderança: foca na mudança, inovação, visão e inspiração</li>
+                <li>Gerenciamento: foca na estabilidade, eficiência, controle e execução</li>
+                <li>Líderes fazem a coisa certa; gerentes fazem as coisas direito</li>
+                <li>Ambos são importantes e complementares nas organizações</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Definição de liderança
+            </div>
+            <div class="list-content">
+              <p>Liderança pode ser definida como o processo de influenciar pessoas para que trabalhem entusiasticamente visando atingir objetivos comuns, inspirando confiança e respeito.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Histórico
+            </div>
+            <div class="list-content">
+              <p>O estudo da liderança evoluiu ao longo do tempo:</p>
+              <ul>
+                <li>Antiguidade: enfoque em qualidades inatas dos líderes</li>
+                <li>Século XIX: Teoria do Grande Homem</li>
+                <li>Década de 1930-40: Teoria dos Traços</li>
+                <li>Década de 1950-60: Teorias Comportamentais</li>
+                <li>Década de 1970 em diante: Teorias Contingenciais e Situacionais</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Teoria do Grande Homem
+            </div>
+            <div class="list-content">
+              <p>Teoria que postula que a liderança é inata - os grandes líderes nascem com características especiais que os predestinam à liderança. Foi popular no século XIX, mas perdeu força por não considerar fatores contextuais e de desenvolvimento.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Teoria dos Traços
+            </div>
+            <div class="list-content">
+              <p>Busca identificar características pessoais que diferenciam líderes de não-líderes. Traços comumente associados à liderança incluem:</p>
+              <ul>
+                <li>Inteligência</li>
+                <li>Autoconfiança</li>
+                <li>Determinação</li>
+                <li>Integridade</li>
+                <li>Sociabilidade</li>
+              </ul>
+              <p>Críticas: não há um conjunto universal de traços que garanta sucesso na liderança em todas as situações.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Teoria Comportamental
+            </div>
+            <div class="list-content">
+              <p>Foca nos comportamentos dos líderes em vez de suas características inatas. Destacam-se dois estilos principais:</p>
+              <ul>
+                <li>Liderança orientada para a tarefa: foco na realização de objetivos</li>
+                <li>Liderança orientada para as pessoas: foco no bem-estar das relações</li>
+              </ul>
+              <p>Estudos da Universidade de Ohio e Michigan foram fundamentais para esta teoria.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Teoria Situacional/Contingencial
+            </div>
+            <div class="list-content">
+              <p>Argumenta que não há um estilo de liderança ideal; o estilo eficaz depende da situação. Fatores situacionais incluem:</p>
+              <ul>
+                <li>Características dos seguidores</li>
+                <li>Natureza da tarefa</li>
+                <li>Estrutura organizacional</li>
+                <li>Ambiente externo</li>
+              </ul>
+              <p>Modelos importantes: Fiedler, Hersey-Blanchard, Caminho-Objetivo.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Aula 6 -->
+      <section id="aula6" class="mb-16" data-aos="fade-up">
+        <h2 class="section-title">Aula 6: Liderança – Parte 2</h2>
+        <div class="list-container">
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Liderança – Parte 2
+            </div>
+            <div class="list-content">
+              <p>Continuação do estudo da liderança, abordando teorias contemporâneas e aspectos práticos da liderança eficaz em contextos organizacionais, especialmente na área da saúde.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Teorias contemporâneas
+            </div>
+            <div class="list-content">
+              <p>Teorias mais recentes sobre liderança:</p>
+              <ul>
+                <li>Liderança Transformacional</li>
+                <li>Liderança Transacional</li>
+                <li>Liderança Servidora</li>
+                <li>Liderança Autêntica</li>
+                <li>Liderança Distribuída</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Liderança Transformacional
+            </div>
+            <div class="list-content">
+              <p>Estilo de liderança que inspira seguidores a transcenderem seus próprios interesses para o bem da organização. Características:</p>
+              <ul>
+                <li>Influência idealizada (carisma)</li>
+                <li>Motivação inspiradora</li>
+                <li>Estímulo intelectual</li>
+                <li>Consideração individualizada</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Liderança Transacional
+            </div>
+            <div class="list-content">
+              <p>Baseia-se em trocas entre líder e seguidores - recompensas por desempenho e correção de desvios. Componentes:</p>
+              <ul>
+                <li>Liderança contingente de recompensa</li>
+                <li>Gerenciamento por exceção (ativo ou passivo)</li>
+              </ul>
+              <p>Eficaz para manter a estabilidade, mas menos inovador que a liderança transformacional.</p>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Liderança Servidora
+            </div>
+            <div class="list-content">
+              <p>Conceito popularizado por Robert Greenleaf, onde o líder prioriza servir os outros. Características:</p>
+              <ul>
+                <li>Ouvir ativamente</li>
+                <li>Empatia</li>
+                <li>Cura (cuidado com o bem-estar)</li>
+                <li>Conscientização</li>
+                <li>Persuasão</li>
+                <li>Compromisso com o crescimento das pessoas</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Liderança na saúde
+            </div>
+            <div class="list-content">
+              <p>Desafios específicos da liderança em serviços de saúde:</p>
+              <ul>
+                <li>Ambiente de alta complexidade e pressão</li>
+                <li>Equipes multiprofissionais</li>
+                <li>Necessidade de tomada de decisão rápida</li>
+                <li>Gestão de recursos escassos</li>
+                <li>Pressão por resultados de qualidade e segurança</li>
+                <li>Adaptação a mudanças tecnológicas rápidas</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Competências do líder em saúde
+            </div>
+            <div class="list-content">
+              <p>Competências essenciais para líderes na área da saúde:</p>
+              <ul>
+                <li>Conhecimento técnico em saúde</li>
+                <li>Habilidades de comunicação eficaz</li>
+                <li>Capacidade de tomada de decisão sob pressão</li>
+                <li>Gestão de conflitos</li>
+                <li>Pensamento sistêmico</li>
+                <li>Resiliência emocional</li>
+                <li>Capacidade de promover segurança do paciente</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Desenvolvimento de liderança
+            </div>
+            <div class="list-content">
+              <p>Estratégias para desenvolver habilidades de liderança:</p>
+              <ul>
+                <li>Mentoria e coaching</li>
+                <li>Experiências desafiadoras</li>
+                <li>Educação formal</li>
+                <li>Auto-reflexão e autoconhecimento</li>
+                <li>Feedback 360 graus</li>
+                <li>Networking e aprendizado com pares</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="list-item">
+            <div class="list-title" onclick="toggleContent(this)">
+              <i data-feather="chevron-right"></i> Liderança e mudança organizacional
+            </div>
+            <div class="list-content">
+              <p>O papel do líder na gestão de mudanças em organizações de saúde:</p>
+              <ul>
+                <li>Criar urgência para a mudança</li>
+                <li>Formar uma coalizão guia</li>
+                <li>Desenvolver uma visão clara</li>
+                <li>Comunicar a visão eficazmente</li>
+                <li>Remover obstáculos</li>
+                <li>Gerar vitórias de curto prazo</li>
+                <li>Consolidar ganhos e produzir mais mudanças</li>
+                <li>Ancorar novas abordagens na cultura</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container mx-auto px-4">
+      <p>LS Educacional - Resumo das Aulas</p>
+      <p>Aluno(a): Simone Gomes Barreto | Professor: José Wiliam Aguiar</p>
+      <p class="mt-4 text-sm">© 2023 - Todos os direitos reservados</p>
+    </div>
+  </footer>
+
+  <script>
+    // Inicializar AOS (Animate On Scroll)
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true
+      });
+      
+      // Inicializar Feather Icons
+      feather.replace();
+      
+      // Mobile menu toggle
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', function() {
+          mobileMenu.classList.toggle('hidden');
+          // Trocar ícone do menu
+          const icon = mobileMenuButton.querySelector('i');
+          if (mobileMenu.classList.contains('hidden')) {
+            icon.setAttribute('data-feather', 'menu');
+          } else {
+            icon.setAttribute('data-feather', 'x');
+          }
+          feather.replace();
+        });
+      }
+    });
+    
+    // Função para mostrar/ocultar conteúdo
+    function toggleContent(element) {
+      const content = element.nextElementSibling;
+      const isActive = content.classList.contains('active');
+      
+      // Fechar todos os conteúdos abertos
+      document.querySelectorAll('.list-content.active').forEach(item => {
+        if (item !== content) {
+          item.classList.remove('active');
+          item.previousElementSibling.classList.remove('expanded');
+        }
+      });
+      
+      // Alternar o conteúdo clicado
+      content.classList.toggle('active');
+      element.classList.toggle('expanded');
+    }
+    
+    // Fechar conteúdo ao clicar fora
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('.list-item')) {
+        document.querySelectorAll('.list-content.active').forEach(item => {
+          item.classList.remove('active');
+          item.previousElementSibling.classList.remove('expanded');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
